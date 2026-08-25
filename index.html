@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Hệ Thống Bảng Tính Thủy Lực & Tra Cứu Ống uPVC</title>
+    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn</title>
     <style>
         :root {
             --excel-green: #107c41;
@@ -16,29 +16,16 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg-color); color: #242424; padding: 10px; }
-        .container { max-width: 950px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
-        .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 12px 10px; font-size: 1.1rem; font-weight: bold; }
-        .content { padding: 15px; }
+        .container { max-width: 720px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
+        .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 12px 10px; font-size: 1.05rem; font-weight: bold; }
+        .content { padding: 12px 15px; }
 
-        .main-select-box { background: #e3f2fd; padding: 12px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #90caf9; }
-        .main-select-box label { font-size: 0.95rem; color: #0d47a1; font-weight: bold; }
-        .main-select-box select { font-size: 0.95rem; font-weight: bold; padding: 8px; margin-top: 5px; border: 2px solid #1976d2; width: 100%; border-radius: 4px; outline: none; }
-
-        .section { margin-top: 15px; border: 1px solid var(--border-color); border-radius: 6px; padding: 12px; background: #fff; }
-        .section-title { color: var(--section-title); font-weight: bold; border-bottom: 2px solid var(--excel-green); padding-bottom: 5px; margin-bottom: 12px; font-size: 1rem; }
-        
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
         @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
         
-        .form-group { display: flex; flex-direction: column; margin-bottom: 8px; }
+        .form-group { display: flex; flex-direction: column; }
         label { font-size: 0.85rem; margin-bottom: 4px; font-weight: 600; color: #333; }
-        input, select { padding: 8px; border: 1px solid var(--border-color); background: #f9fbf9; border-radius: 4px; font-size: 0.9rem; outline: none; width: 100%; height: 38px; box-sizing: border-box; }
-
-        button { width: 100%; background: var(--excel-green); color: white; border: none; padding: 12px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #0d6233; }
-
-        .result-box { background: #eef9f1; border: 1px solid #c2eabd; padding: 12px; border-radius: 6px; margin-top: 12px; }
-        .result-title { font-weight: bold; color: var(--excel-green); font-size: 1rem; }
+        select { padding: 8px; border: 1px solid var(--border-color); background: #f9fbf9; border-radius: 4px; font-size: 0.9rem; outline: none; width: 100%; height: 38px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
         th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
@@ -46,499 +33,175 @@
         tr:nth-child(even) { background: #fdfdfd; }
         tr:hover { background: #f0f7f0; }
 
-        .row-success { background-color: #e8f5e9 !important; color: #1b5e20 !important; font-weight: bold !important; }
-        .text-danger { color: #d32f2f; font-weight: bold; }
-        .text-success { color: #1b5e20; font-weight: bold; }
-        .module { display: none; }
-        .module.active { display: block; }
+        .filter-group { margin-bottom: 12px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-bar">HỆ THỐNG TÍNH THỦY LỰC & TRA CỨU ỐNG uPVC</div>
+    <div class="header-bar">BẢNG TRA ĐƯỜNG KÍNH ỐNG TIÊU CHUẨN</div>
     <div class="content">
-
-        <!-- DANH SÁCH CHỌN CHƯƠNG TRÌNH TÍNH -->
-        <div class="main-select-box">
-            <label for="module_select">CHỌN BẢNG TÍNH HOẶC TRA CỨU:</label>
-            <select id="module_select" onchange="switchModule()">
-                <option value="mod_pipe_opt">1. Tính toán & Tối ưu Đường kính ống uPVC (Cách 1 & Cách 2)</option>
-                <option value="mod_flow">2. Bảng tính Lưu lượng nước (Q = v × A)</option>
-                <option value="mod_loss">3. Bảng tính Tổn thất áp lực ống uPVC (Hazen-Williams)</option>
-                <option value="mod_flush">4. Bảng tính Thông rửa đường ống (Vận tốc & Thời gian xả)</option>
-                <option value="mod_pump">5. Bảng tính Cột áp bơm cần thiết (H_pump)</option>
-                <option value="mod_lookup">6. Tra cứu Bảng Đường kính ống uPVC Tiêu chuẩn (DN21 - DN450)</option>
-            </select>
-        </div>
-
-        <!-- MÔ-ĐUN 1: TÍNH & TỐI ƯU ĐƯỜNG KÍNH ỐNG uPVC -->
-        <div id="mod_pipe_opt" class="module active">
-            <div class="section">
-                <div class="section-title">I. PHƯƠNG PHÁP & THÔNG SỐ TÍNH TOÁN ỐNG uPVC</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Vật liệu:</label>
-                        <input type="text" value="Ống Nhựa uPVC (ISO 1452 / TCVN 8491)" readonly style="background:#eee;">
-                    </div>
-                    <div class="form-group">
-                        <label>Cấp áp lực uPVC:</label>
-                        <select id="m1_pn" onchange="calcModule1()"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>Phương pháp tính đường kính:</label>
-                    <select id="method" onchange="toggleInputsPipe()">
-                        <option value="1">Cách 1: Cho trước Lưu lượng Q → Tìm Đường kính D (theo v chọn)</option>
-                        <option value="2" selected>Cách 2: Cho trước Q, Chênh áp (P1-P2) → Tối ưu D thỏa mãn ΔP & v</option>
-                    </select>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Lưu lượng thiết kế Q (m³/h):</label>
-                        <input type="number" id="m1_q" value="100" step="0.001">
-                    </div>
-                    <div class="form-group">
-                        <label>Chiều dài tuyến L (m):</label>
-                        <input type="number" id="m1_l" value="1000">
-                    </div>
-                </div>
-                <div class="form-grid" id="row_p_inputs">
-                    <div class="form-group">
-                        <label>Áp lực đầu P1 (bar):</label>
-                        <input type="number" id="m1_p1" value="4" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label>Áp lực cuối P2 (bar):</label>
-                        <input type="number" id="m1_p2" value="2" step="0.1">
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group" id="group_v_input">
-                        <label>Vận tốc kinh tế chọn v (m/s):</label>
-                        <input type="number" id="m1_v" value="1.2" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label>Hệ số nhám Hazen-Williams C (uPVC):</label>
-                        <input type="number" id="m1_c" value="140" readonly style="background:#eee;">
-                    </div>
-                </div>
+        
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="materialSelect">Vật liệu ống:</label>
+                <select id="materialSelect" onchange="onMaterialChange()">
+                    <option value="hdpe">Ống Nhựa HDPE (ISO 4427 / TCVN 7305)</option>
+                    <option value="pvc">Ống Nhựa uPVC (ISO 1452 / TCVN 8491)</option>
+                    <option value="ductile">Ống Gang Dẻo (ISO 2531 / TCVN 10177)</option>
+                    <option value="steel">Ống Thép Cấp Nước (ASTM A53 / BS 1387)</option>
+                </select>
             </div>
-            <button onclick="calcModule1()">Tính Toán Đường Kính Ống uPVC</button>
-        </div>
-
-        <!-- MÔ-ĐUN 2: TÍNH LƯU LƯỢNG NƯỚC -->
-        <div id="mod_flow" class="module">
-            <div class="section">
-                <div class="section-title">I. THÔNG SỐ TÍNH LƯU LƯỢNG NƯỚC</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Đường kính trong D (mm):</label>
-                        <input type="number" id="m2_d" value="103.6">
-                    </div>
-                    <div class="form-group">
-                        <label>Vận tốc chảy v (m/s):</label>
-                        <input type="number" id="m2_v" value="1.2" step="0.1">
-                    </div>
-                </div>
+            
+            <div class="form-group">
+                <label for="pnSelect">Cấp áp lực / Cấp độ dày:</label>
+                <select id="pnSelect" onchange="renderTable()">
+                    <!-- Tự động cập nhật theo vật liệu -->
+                </select>
             </div>
-            <button onclick="calcModule2()">Tính Lưu Lượng Q</button>
         </div>
 
-        <!-- MÔ-ĐUN 3: TÍNH TỔN THẤT ÁP LỰC -->
-        <div id="mod_loss" class="module">
-            <div class="section">
-                <div class="section-title">I. THÔNG SỐ TÍNH TỔN THẤT ÁP LỰC ỐNG uPVC</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Lưu lượng Q (m³/h):</label>
-                        <input type="number" id="m3_q" value="100">
-                    </div>
-                    <div class="form-group">
-                        <label>Đường kính trong D (mm):</label>
-                        <input type="number" id="m3_d" value="103.6">
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Chiều dài tuyến L (m):</label>
-                        <input type="number" id="m3_l" value="1000">
-                    </div>
-                    <div class="form-group">
-                        <label>Hệ số nhám C (uPVC):</label>
-                        <input type="number" id="m3_c" value="140" readonly style="background:#eee;">
-                    </div>
-                </div>
+        <div class="filter-group">
+            <div class="form-group">
+                <label for="dnSelect">Chọn đường kính danh nghĩa (DN):</label>
+                <select id="dnSelect" onchange="renderTable()">
+                    <!-- Tự động cập nhật theo danh sách DN của vật liệu -->
+                </select>
             </div>
-            <button onclick="calcModule3()">Tính Tổn Thất Áp Lực</button>
         </div>
 
-        <!-- MÔ-ĐUN 4: THÔNG RỬA ĐƯỜNG ỐNG -->
-        <div id="mod_flush" class="module">
-            <div class="section">
-                <div class="section-title">I. THÔNG SỐ TÍNH THÔNG RỬA ĐƯỜNG ỐNG</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Đường kính trong D (mm):</label>
-                        <input type="number" id="m4_d" value="103.6">
-                    </div>
-                    <div class="form-group">
-                        <label>Chiều dài tuyến L (m):</label>
-                        <input type="number" id="m4_l" value="1000">
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Vận tốc thông rửa yêu cầu (m/s) [≥ 1.5m/s]:</label>
-                        <input type="number" id="m4_v" value="1.5" step="0.1">
-                    </div>
-                    <div class="form-group">
-                        <label>Số lần thể tích ống cần xả (2 - 3 lần):</label>
-                        <input type="number" id="m4_turn" value="2">
-                    </div>
-                </div>
-            </div>
-            <button onclick="calcModule4()">Tính Thông Số Súc Rửa</button>
-        </div>
-
-        <!-- MÔ-ĐUN 5: CỘT ÁP BƠM -->
-        <div id="mod_pump" class="module">
-            <div class="section">
-                <div class="section-title">I. THÔNG SỐ TÍNH CỘT ÁP BƠM (H_pump)</div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Chênh lệch cao độ H_geo (m):</label>
-                        <input type="number" id="m5_hgeo" value="10">
-                    </div>
-                    <div class="form-group">
-                        <label>Tổn thất dọc đường Hf (m):</label>
-                        <input type="number" id="m5_hf" value="15">
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Tổn thất cục bộ Hj (m) [10-15% Hf]:</label>
-                        <input type="number" id="m5_hj" value="2.2">
-                    </div>
-                    <div class="form-group">
-                        <label>Áp lực tự do tại điểm cuối H_td (m H₂O):</label>
-                        <input type="number" id="m5_htd" value="10">
-                    </div>
-                </div>
-            </div>
-            <button onclick="calcModule5()">Tính Cột Áp Bơm</button>
-        </div>
-
-        <!-- MÔ-ĐUN 6: TRA CỨU BẢNG ĐƯỜNG KÍNH ỐNG uPVC -->
-        <div id="mod_lookup" class="module">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="pnSelect">Cấp áp lực uPVC:</label>
-                    <select id="pnSelect" onchange="renderLookupTable()"></select>
-                </div>
-                <div class="form-group">
-                    <label for="dnSelect">Lọc theo quy cách (DN):</label>
-                    <select id="dnSelect" onchange="renderLookupTable()"></select>
-                </div>
-            </div>
-            <div id="lookupTableContainer"></div>
-        </div>
-
-        <!-- KHU VỰC HIỂN THỊ KẾT QUẢ DÙNG CHUNG (CHO MOD 1-5) -->
-        <div class="section" id="results_section" style="display:none;">
-            <div class="section-title">II. KẾT QUẢ TÍNH TOÁN</div>
-            <div id="summary_output"></div>
-            <div class="result-box" id="recommendation_box"></div>
-            <div id="table_container"></div>
-        </div>
+        <div id="tableContainer"></div>
 
     </div>
 </div>
 
 <script>
-    // CƠ SỞ DỮ LIỆU DUY NHẤT CHO ỐNG uPVC (DN21 ĐẾN DN450 TỪ ẢNH)
-    const UPVC_DB = {
-        c: 140,
-        dns: [21, 27, 34, 42, 48, 60, 75, 90, 110, 125, 140, 160, 180, 200, 225, 250, 280, 315, 355, 400, 450],
-        pns: {
-            "pn10": {
-                name: "PN10 (Class 3)",
-                e:  [1.5, 1.8, 2.0, 2.1, 2.3, 2.6, 3.6, 4.3, 5.3, 6.0, 6.7, 7.7, 8.6, 9.6, 10.8, 11.9, 13.4, 15.0, 16.9, 19.1, 21.5],
-                id: [18.0, 23.4, 30.0, 37.8, 43.4, 54.8, 67.8, 81.4, 99.4, 113.0, 126.6, 144.6, 162.8, 180.8, 203.4, 226.2, 253.2, 285.0, 321.2, 361.8, 407.0]
+    const PIPE_DB = {
+        hdpe: {
+            pns: {
+                "pn10":   { name: "PN10 (SDR17)",   e: [3.8, 4.5, 5.4, 6.6, 9.5, 11.9, 13.4, 14.8, 16.6, 18.7, 21.1, 23.7, 26.7, 29.7, 37.4], id: [55.4, 66.0, 79.2, 96.8, 141.0, 176.2, 198.2, 220.4, 246.8, 277.6, 312.8, 352.6, 396.6, 440.6, 555.2] },
+                "pn12.5": { name: "PN12.5 (SDR13.6)", e: [4.7, 5.6, 6.7, 8.1, 11.8, 14.7, 16.6, 18.4, 20.6, 23.2, 26.1, 29.4, 33.1, 36.8, 46.3], id: [53.6, 63.8, 76.6, 93.8, 136.4, 170.6, 191.8, 213.2, 238.8, 268.6, 302.8, 341.2, 383.8, 426.4, 537.4] },
+                "pn16":   { name: "PN16 (SDR11)",   e: [5.8, 6.8, 8.2, 10.0, 14.6, 18.2, 20.5, 22.7, 25.4, 28.6, 32.2, 36.3, 40.9, 45.4, 57.2], id: [51.4, 61.4, 73.6, 90.0, 130.8, 163.6, 184.0, 204.6, 229.2, 257.8, 290.6, 327.4, 368.2, 409.2, 515.6] },
+                "pn20":   { name: "PN20 (SDR9)",    e: [7.1, 8.4, 10.1, 12.3, 17.9, 22.4, 25.2, 27.9, 31.3, 35.2, 39.7, 44.7, 50.3, 55.8, 70.3], id: [48.8, 58.2, 69.8, 85.4, 124.2, 155.2, 174.6, 194.2, 217.4, 244.6, 275.6, 310.6, 349.4, 388.4, 489.4] }
             },
-            "pn6": {
-                name: "PN6 (Class 1)",
-                e:  [1.2, 1.3, 1.5, 1.6, 1.8, 2.0, 2.2, 2.7, 3.2, 3.7, 4.1, 4.7, 5.3, 5.9, 6.6, 7.3, 8.2, 9.2, 10.4, 11.7, 13.2],
-                id: [18.6, 24.4, 31.0, 38.8, 44.4, 56.0, 70.6, 84.6, 103.6, 117.6, 131.8, 150.6, 169.4, 188.2, 211.8, 235.4, 263.6, 296.6, 334.2, 376.6, 423.6]
+            dns: [63, 75, 90, 110, 160, 200, 225, 250, 280, 315, 355, 400, 450, 500, 630]
+        },
+        pvc: {
+            pns: {
+                "pn6":  { name: "PN6",  e: [1.5, 1.9, 2.2, 2.7, 3.9, 4.9, 5.5, 6.2, 7.7, 9.8], id: [57.0, 71.2, 85.6, 104.6, 152.2, 190.2, 214.0, 237.6, 299.6, 380.4] },
+                "pn8":  { name: "PN8",  e: [1.9, 2.3, 2.8, 3.4, 4.9, 6.2, 6.9, 7.7, 9.7, 12.3], id: [56.2, 70.4, 84.4, 103.2, 150.2, 187.6, 211.2, 234.6, 295.6, 375.4] },
+                "pn10": { name: "PN10", e: [2.3, 2.9, 3.5, 4.2, 6.2, 7.7, 8.6, 9.6, 12.1, 15.3], id: [55.4, 69.2, 83.0, 101.6, 147.6, 184.6, 207.8, 230.8, 290.8, 369.4] },
+                "pn12.5": { name: "PN12.5", e: [2.9, 3.6, 4.3, 5.3, 7.7, 9.6, 10.8, 11.9, 15.0, 19.1], id: [54.2, 67.8, 81.4, 99.4, 144.6, 180.8, 203.4, 226.2, 285.0, 361.8] },
+                "pn16": { name: "PN16", e: [3.6, 4.5, 5.4, 6.6, 9.5, 11.9, 13.4, 14.8, 18.7, 23.7], id: [52.8, 66.0, 79.2, 96.8, 141.0, 176.2, 198.2, 220.4, 277.6, 352.6] }
             },
-            "pn8": {
-                name: "PN8 (Class 2)",
-                e:  [1.3, 1.5, 1.7, 1.8, 2.0, 2.3, 2.9, 3.5, 4.2, 4.8, 5.4, 6.2, 6.9, 7.7, 8.6, 9.6, 10.7, 12.1, 13.6, 15.3, 17.2],
-                id: [18.4, 24.0, 30.6, 38.4, 44.0, 55.4, 69.2, 83.0, 101.6, 115.4, 129.2, 147.6, 166.2, 184.6, 207.8, 230.8, 258.6, 290.8, 327.8, 369.4, 415.6]
+            dns: [60, 75, 90, 110, 160, 200, 225, 250, 315, 400]
+        },
+        ductile: {
+            pns: {
+                "pn10": { name: "PN10 (Class C25/C30)", lining: [4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6], e: [4.7, 4.7, 4.7, 4.7, 5.0, 5.3, 6.0, 6.8, 7.5, 8.3, 9.0, 9.8, 10.5, 12.0], id: [78.6, 100.6, 152.6, 204.6, 256.0, 307.4, 407.0, 508.4, 610.0, 711.4, 812.0, 912.4, 1015.0, 1218.0] },
+                "pn16": { name: "PN16 (Class C40)", lining: [4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6], e: [4.8, 4.8, 5.1, 5.5, 6.0, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5, 15.3], id: [78.4, 100.4, 151.8, 203.0, 254.0, 305.0, 404.0, 505.0, 606.0, 707.0, 807.0, 907.0, 1009.0, 1211.4] },
+                "k9":   { name: "Class K9 (PN25 / Chịu lực cao)", lining: [4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6], e: [6.0, 6.0, 6.0, 6.3, 6.8, 7.2, 8.1, 9.0, 9.9, 10.8, 11.7, 12.6, 13.5, 15.3], id: [76.0, 98.0, 150.0, 201.4, 252.4, 303.6, 402.8, 504.0, 605.2, 706.4, 806.6, 906.8, 1009.0, 1211.4] }
             },
-            "pn12.5": {
-                name: "PN12.5 (Class 4)",
-                e:  [1.7, 2.0, 2.3, 2.5, 2.8, 3.2, 4.4, 5.3, 6.5, 7.4, 8.3, 9.5, 10.7, 11.9, 13.4, 14.8, 16.6, 18.7, 21.0, 23.7, 26.6],
-                id: [17.6, 23.0, 29.4, 37.0, 42.4, 53.6, 66.2, 79.4, 97.0, 110.2, 123.4, 141.0, 158.6, 176.2, 198.2, 220.4, 246.8, 277.6, 313.0, 352.6, 396.8]
+            dns: [80, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000, 1200],
+            ods: [98, 118, 170, 222, 274, 326, 429, 532, 635, 738, 842, 945, 1048, 1255]
+        },
+        steel: {
+            pns: {
+                "std":   { name: "Tiêu chuẩn STD", e: [3.91, 5.49, 6.02, 7.11, 8.18, 9.27, 9.52, 9.52, 9.52, 9.53, 9.53, 9.53, 9.53, 9.53, 9.53, 9.53], id: [52.48, 77.92, 102.26, 154.08, 202.74, 254.46, 304.76, 387.36, 488.96, 590.94, 692.14, 793.74, 895.34, 996.94, 1098.54, 1200.14] },
+                "sch40": { name: "Tiêu chuẩn SCH40", e: [3.91, 5.49, 6.02, 7.11, 8.18, 9.27, 9.52, 9.52, 9.52, 17.48, 17.48, 17.48, 19.05, 19.05, 19.05, 19.05], id: [52.48, 77.92, 102.26, 154.08, 202.74, 254.46, 304.76, 387.36, 488.96, 575.04, 676.24, 777.84, 876.30, 977.90, 1079.50, 1181.10] }
             },
-            "pn16": {
-                name: "PN16 (Class 5)",
-                e:  [2.0, 2.4, 2.9, 3.1, 3.5, 4.0, 5.6, 6.7, 8.1, 9.3, 10.4, 11.9, 13.4, 14.9, 16.7, 18.6, 20.8, 23.3, 26.3, 29.6, 33.3],
-                id: [17.0, 22.2, 28.2, 35.8, 41.0, 52.0, 63.8, 76.6, 93.8, 106.4, 119.2, 136.2, 153.2, 170.2, 191.6, 212.8, 238.4, 268.4, 302.4, 340.8, 383.4]
-            }
+            dns: ['DN50 (2")', 'DN80 (3")', 'DN100 (4")', 'DN150 (6")', 'DN200 (8")', 'DN250 (10")', 'DN300 (12")', 'DN400 (16")', 'DN500 (20")', 'DN600 (24")', 'DN700 (28")', 'DN800 (32")', 'DN900 (36")', 'DN1000 (40")', 'DN1100 (44")', 'DN1200 (48")'],
+            ods: [60.3, 88.9, 114.3, 168.3, 219.1, 273.0, 323.8, 406.4, 508.0, 610.0, 711.2, 812.8, 914.4, 1016.0, 1117.6, 1219.2]
         }
     };
 
-    function switchModule() {
-        const selected = document.getElementById("module_select").value;
-        document.querySelectorAll('.module').forEach(el => el.classList.remove('active'));
-        document.getElementById(selected).classList.add('active');
-        
-        document.getElementById("results_section").style.display = "none";
-        if (selected === 'mod_lookup') {
-            renderLookupTable();
-        }
+    function onMaterialChange() {
+        updatePNList();
+        updateDNList();
+        renderTable();
     }
 
-    function toggleInputsPipe() {
-        const method = document.getElementById("method").value;
-        if (method === "1") {
-            document.getElementById("row_p_inputs").style.display = "none";
-            document.getElementById("group_v_input").style.display = "flex";
-        } else {
-            document.getElementById("row_p_inputs").style.display = "grid";
-            document.getElementById("group_v_input").style.display = "none";
-        }
-    }
-
-    function initPNLists() {
-        const m1Pn = document.getElementById('m1_pn');
+    function updatePNList() {
+        const mat = document.getElementById('materialSelect').value;
         const pnSelect = document.getElementById('pnSelect');
-        const dnSelect = document.getElementById('dnSelect');
-        
-        m1Pn.innerHTML = '';
         pnSelect.innerHTML = '';
-        dnSelect.innerHTML = '';
 
-        for (let key in UPVC_DB.pns) {
-            let opt1 = document.createElement('option');
-            opt1.value = key;
-            opt1.innerText = UPVC_DB.pns[key].name;
-            m1Pn.appendChild(opt1);
-
-            let opt2 = document.createElement('option');
-            opt2.value = key;
-            opt2.innerText = UPVC_DB.pns[key].name;
-            pnSelect.appendChild(opt2);
+        const pns = PIPE_DB[mat].pns;
+        for (let key in pns) {
+            let opt = document.createElement('option');
+            opt.value = key;
+            opt.innerText = pns[key].name;
+            pnSelect.appendChild(opt);
         }
+    }
+
+    function updateDNList() {
+        const mat = document.getElementById('materialSelect').value;
+        const dnSelect = document.getElementById('dnSelect');
+        dnSelect.innerHTML = '';
 
         let optAll = document.createElement('option');
         optAll.value = "all";
-        optAll.innerText = "-- Tất cả cỡ ống uPVC --";
+        optAll.innerText = "-- Tất cả đường kính --";
         dnSelect.appendChild(optAll);
 
-        UPVC_DB.dns.forEach(dn => {
+        const dns = PIPE_DB[mat].dns;
+        dns.forEach(dn => {
             let opt = document.createElement('option');
             opt.value = dn;
-            opt.innerText = `DN${dn}`;
+            opt.innerText = typeof dn === 'number' ? `DN${dn}` : dn;
             dnSelect.appendChild(opt);
         });
     }
 
-    function calcHf(Q_m3h, Din_mm, L_m, C) {
-        const Q_m3s = Q_m3h / 3600;
-        const D_m = Din_mm / 1000;
-        return 10.67 * L_m * Math.pow(Q_m3s, 1.852) * Math.pow(C, -1.852) * Math.pow(D_m, -4.87);
-    }
-
-    function calcV(Q_m3h, Din_mm) {
-        const Q_m3s = Q_m3h / 3600;
-        const D_m = Din_mm / 1000;
-        const A = Math.PI * Math.pow(D_m, 2) / 4;
-        return Q_m3s / A;
-    }
-
-    // 1. TÍNH ĐƯỜNG KÍNH TỰ ĐỘNG CHO ỐNG uPVC
-    function calcModule1() {
-        const pnKey = document.getElementById("m1_pn").value;
-        const method = document.getElementById("method").value;
-        const Q = parseFloat(document.getElementById("m1_q").value);
-        const L = parseFloat(document.getElementById("m1_l").value);
-        const C = UPVC_DB.c;
-
-        const pnData = UPVC_DB.pns[pnKey];
-        document.getElementById("results_section").style.display = "block";
-
-        let tableHTML = `<table><thead><tr>
-            <th>Qui cách (DN)</th><th>Đường kính trong ID (mm)</th><th>Vận tốc v (m/s)</th><th>Tổn thất Hf (m)</th><th>Tổn thất i (m/km)</th><th>Đánh giá</th>
-        </tr></thead><tbody>`;
-
-        if (method === "1") {
-            const v_select = parseFloat(document.getElementById("m1_v").value);
-            let recommendedPipe = null;
-
-            for (let i = 0; i < UPVC_DB.dns.length; i++) {
-                const dn = `DN${UPVC_DB.dns[i]}`;
-                const din = pnData.id[i];
-                const v = calcV(Q, din);
-                const Hf = calcHf(Q, din, L, C);
-                const loss_i = Hf / (L / 1000);
-                let isPass = (v >= 0.6 && v <= 2.0 && loss_i <= 10.0);
-
-                if (isPass && (!recommendedPipe || Math.abs(v - v_select) < Math.abs(calcV(Q, recommendedPipe.din) - v_select))) {
-                    recommendedPipe = { dn: dn, din: din, v: v, hf: Hf };
-                }
-
-                tableHTML += `<tr class="${isPass ? 'row-success' : ''}">
-                    <td><b>${dn}</b></td><td>${din}</td><td>${v.toFixed(2)}</td><td>${Hf.toFixed(2)}</td><td>${loss_i.toFixed(2)}</td>
-                    <td class="${isPass ? 'text-success' : 'text-danger'}">${isPass ? 'Đạt điều kiện' : 'Không đạt'}</td>
-                </tr>`;
-            }
-            tableHTML += `</tbody></table>`;
-            document.getElementById("summary_output").innerHTML = `<p>Tối ưu chọn ống uPVC cho <b>${pnData.name}</b> theo v_chọn = ${v_select} m/s</p>`;
-            document.getElementById("recommendation_box").innerHTML = `<div class="result-title">Đề xuất tối ưu: ${recommendedPipe ? recommendedPipe.dn + ' (ID ' + recommendedPipe.din + 'mm, v = ' + recommendedPipe.v.toFixed(2) + 'm/s)' : 'Chưa có cỡ phù hợp'}</div>`;
-
-        } else {
-            const p1 = parseFloat(document.getElementById("m1_p1").value);
-            const p2 = parseFloat(document.getElementById("m1_p2").value);
-            const deltaP_m = (p1 - p2) * 10.197;
-            let optimalPipe = null;
-
-            for (let i = 0; i < UPVC_DB.dns.length; i++) {
-                const dn = `DN${UPVC_DB.dns[i]}`;
-                const din = pnData.id[i];
-                const v = calcV(Q, din);
-                const Hf = calcHf(Q, din, L, C);
-                const loss_i = Hf / (L / 1000);
-                let isPass = (Hf <= deltaP_m && v >= 0.6 && v <= 2.0);
-
-                if (isPass && !optimalPipe) {
-                    optimalPipe = { dn: dn, din: din, v: v, hf: Hf };
-                }
-
-                tableHTML += `<tr class="${isPass ? 'row-success' : ''}">
-                    <td><b>${dn}</b></td><td>${din}</td><td>${v.toFixed(2)}</td><td>${Hf.toFixed(2)}</td><td>${loss_i.toFixed(2)}</td>
-                    <td class="${isPass ? 'text-success' : 'text-danger'}">${isPass ? 'Đạt điều kiện' : 'Không đạt'}</td>
-                </tr>`;
-            }
-            tableHTML += `</tbody></table>`;
-            document.getElementById("summary_output").innerHTML = `<p>Chênh áp cho phép cho ống uPVC <b>${pnData.name}</b>: ΔP = ${(p1-p2).toFixed(2)} bar (${deltaP_m.toFixed(2)} m H₂O)</p>`;
-            document.getElementById("recommendation_box").innerHTML = `<div class="result-title">Đề xuất tối ưu: ${optimalPipe ? optimalPipe.dn + ' (ID ' + optimalPipe.din + 'mm, Tổn thất Hf = ' + optimalPipe.hf.toFixed(2) + 'm)' : 'Cần tăng cỡ ống'}</div>`;
-        }
-        document.getElementById("table_container").innerHTML = tableHTML;
-    }
-
-    // 2. TÍNH LƯU LƯỢNG
-    function calcModule2() {
-        const D = parseFloat(document.getElementById("m2_d").value);
-        const v = parseFloat(document.getElementById("m2_v").value);
-        const A = Math.PI * Math.pow(D / 1000, 2) / 4;
-        const Q_m3s = A * v;
-        const Q_m3h = Q_m3s * 3600;
-
-        document.getElementById("results_section").style.display = "block";
-        document.getElementById("table_container").innerHTML = "";
-        document.getElementById("summary_output").innerHTML = `<p>Mặt cắt ngang lòng ống A = <b>${A.toFixed(4)} m²</b></p>`;
-        document.getElementById("recommendation_box").innerHTML = 
-            `<div class="result-title">Lưu lượng chảy Q = ${Q_m3h.toFixed(2)} m³/h (${(Q_m3s*1000).toFixed(2)} l/s)</div>`;
-    }
-
-    // 3. TÍNH TỔN THẤT
-    function calcModule3() {
-        const Q = parseFloat(document.getElementById("m3_q").value);
-        const D = parseFloat(document.getElementById("m3_d").value);
-        const L = parseFloat(document.getElementById("m3_l").value);
-        const C = UPVC_DB.c;
-
-        const Hf = calcHf(Q, D, L, C);
-        const loss_i = Hf / (L / 1000);
-        const p_loss_bar = Hf / 10.197;
-
-        document.getElementById("results_section").style.display = "block";
-        document.getElementById("table_container").innerHTML = "";
-        document.getElementById("summary_output").innerHTML = `<p>Độ dốc thủy lực i = <b>${loss_i.toFixed(2)} m/km</b></p>`;
-        document.getElementById("recommendation_box").innerHTML = 
-            `<div class="result-title">Tổn thất cột áp Hf = ${Hf.toFixed(2)} m H₂O (tương đương ${p_loss_bar.toFixed(2)} bar)</div>`;
-    }
-
-    // 4. THÔNG RỬA
-    function calcModule4() {
-        const D = parseFloat(document.getElementById("m4_d").value);
-        const L = parseFloat(document.getElementById("m4_l").value);
-        const v = parseFloat(document.getElementById("m4_v").value);
-        const turns = parseFloat(document.getElementById("m4_turn").value);
-
-        const A = Math.PI * Math.pow(D / 1000, 2) / 4;
-        const V_pipe = A * L;
-        const Q_flush_m3s = A * v;
-        const Q_flush_m3h = Q_flush_m3s * 3600;
-        const Total_Water_m3 = V_pipe * turns;
-        const Time_minutes = (Total_Water_m3 / Q_flush_m3h) * 60;
-
-        document.getElementById("results_section").style.display = "block";
-        document.getElementById("table_container").innerHTML = "";
-        document.getElementById("summary_output").innerHTML = `<p>Dung tích nước chứa trong đường ống uPVC: <b>V_ống = ${V_pipe.toFixed(2)} m³</b></p>`;
-        document.getElementById("recommendation_box").innerHTML = 
-            `<div class="result-title">Lưu lượng xả rửa cần thiết: ${Q_flush_m3h.toFixed(2)} m³/h</div>
-             <p>Tổng lượng nước súc rửa (${turns} lần thể tích): <b>${Total_Water_m3.toFixed(2)} m³</b></p>
-             <p>Thời gian mở van xả rửa liên tục: <b>${Time_minutes.toFixed(1)} phút</b></p>`;
-    }
-
-    // 5. CỘT ÁP BƠM
-    function calcModule5() {
-        const H_geo = parseFloat(document.getElementById("m5_hgeo").value);
-        const Hf = parseFloat(document.getElementById("m5_hf").value);
-        const Hj = parseFloat(document.getElementById("m5_hj").value);
-        const H_td = parseFloat(document.getElementById("m5_htd").value);
-
-        const H_pump = H_geo + Hf + Hj + H_td;
-        const P_pump_bar = H_pump / 10.197;
-
-        document.getElementById("results_section").style.display = "block";
-        document.getElementById("table_container").innerHTML = "";
-        document.getElementById("summary_output").innerHTML = `<p>Tổng tổn thất đường ống (Hf + Hj): <b>${(Hf + Hj).toFixed(2)} m</b></p>`;
-        document.getElementById("recommendation_box").innerHTML = 
-            `<div class="result-title">Cột áp máy bơm yêu cầu H_pump = ${H_pump.toFixed(2)} m H₂O (≈ ${P_pump_bar.toFixed(2)} bar)</div>`;
-    }
-
-    // 6. TRA CỨU BẢNG ĐƯỜNG KÍNH ỐNG uPVC
-    function renderLookupTable() {
+    function renderTable() {
+        const mat = document.getElementById('materialSelect').value;
         const pnKey = document.getElementById('pnSelect').value;
         const selectedDN = document.getElementById('dnSelect').value;
-        const pnData = UPVC_DB.pns[pnKey];
+        
+        const matData = PIPE_DB[mat];
+        if (!matData.pns[pnKey]) return;
+        const pnData = matData.pns[pnKey];
 
-        let html = `<table><thead><tr>
-            <th>Qui cách (DN)</th><th>Đường kính ngoài OD (mm)</th><th>Độ dày e (mm)</th><th>Đường kính lòng ống ID (mm)</th>
-        </tr></thead><tbody>`;
+        let html = `<table><thead><tr>`;
+        
+        if (mat === 'hdpe' || mat === 'pvc') {
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th>`;
+        } else if (mat === 'ductile') {
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th>`;
+        } else if (mat === 'steel') {
+            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th>`;
+        }
+        
+        html += `</tr></thead><tbody>`;
 
         let count = 0;
-        for (let i = 0; i < UPVC_DB.dns.length; i++) {
-            let dn = UPVC_DB.dns[i];
-
+        for (let i = 0; i < matData.dns.length; i++) {
+            let dn = matData.dns[i];
+            
             if (selectedDN !== "all" && dn.toString() !== selectedDN.toString()) continue;
-
+            
             count++;
-            html += `<tr>
-                <td><b>DN${dn}</b></td>
-                <td>${dn}</td>
-                <td>${pnData.e[i]}</td>
-                <td><b style="color:#107c41;">${pnData.id[i]}</b></td>
-            </tr>`;
+            html += `<tr>`;
+            if (mat === 'hdpe' || mat === 'pvc') {
+                html += `<td><b>${dn}</b></td><td>${dn}</td><td>${pnData.e[i]}</td><td><b style="color:#107c41;">${pnData.id[i]}</b></td>`;
+            } else if (mat === 'ductile') {
+                html += `<td><b>${dn}</b></td><td>${matData.ods[i]}</td><td>${pnData.lining[i]}</td><td>${pnData.e[i]}</td><td><b style="color:#107c41;">${pnData.id[i]}</b></td>`;
+            } else if (mat === 'steel') {
+                html += `<td><b>${dn}</b></td><td>${matData.ods[i]}</td><td>${pnData.e[i]}</td><td><b style="color:#107c41;">${pnData.id[i]}</b></td>`;
+            }
+            html += `</tr>`;
         }
 
         if (count === 0) {
-            html += `<tr><td colspan="4">Không tìm thấy cỡ ống uPVC phù hợp</td></tr>`;
+            html += `<tr><td colspan="5">Không tìm thấy cỡ ống phù hợp</td></tr>`;
         }
 
         html += `</tbody></table>`;
-        document.getElementById('lookupTableContainer').innerHTML = html;
+        document.getElementById('tableContainer').innerHTML = html;
     }
 
-    // Khởi tạo
-    window.onload = function() {
-        initPNLists();
-        toggleInputsPipe();
-    };
+    window.onload = onMaterialChange;
 </script>
 </body>
 </html>
