@@ -12,7 +12,6 @@
             --bg-color: #f0f4f1;
             --card-bg: #ffffff;
             --border-color: #c8d6c9;
-            --btn-blue: #0070c0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +25,7 @@
         
         .form-group { display: flex; flex-direction: column; }
         label { font-size: 0.85rem; margin-bottom: 4px; font-weight: 600; color: #333; }
-        select, input { padding: 8px; border: 1px solid var(--border-color); background: #f9fbf9; border-radius: 4px; font-size: 0.9rem; outline: none; width: 100%; height: 38px; }
+        select { padding: 8px; border: 1px solid var(--border-color); background: #f9fbf9; border-radius: 4px; font-size: 0.9rem; outline: none; width: 100%; height: 38px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
         th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
@@ -34,7 +33,7 @@
         tr:nth-child(even) { background: #fdfdfd; }
         tr:hover { background: #f0f7f0; }
 
-        .search-box { margin-bottom: 12px; }
+        .filter-group { margin-bottom: 12px; }
     </style>
 </head>
 <body>
@@ -46,7 +45,7 @@
         <div class="form-grid">
             <div class="form-group">
                 <label for="materialSelect">Vật liệu ống:</label>
-                <select id="materialSelect" onchange="updatePNList()">
+                <select id="materialSelect" onchange="onMaterialChange()">
                     <option value="hdpe">Ống Nhựa HDPE (ISO 4427 / TCVN 7305)</option>
                     <option value="pvc">Ống Nhựa uPVC (ISO 1452 / TCVN 8491)</option>
                     <option value="ductile">Ống Gang Dẻo (ISO 2531 / TCVN 10177)</option>
@@ -62,8 +61,13 @@
             </div>
         </div>
 
-        <div class="search-box">
-            <input type="number" id="searchInput" placeholder="Nhập đường kính DN để lọc nhanh..." oninput="renderTable()">
+        <div class="filter-group">
+            <div class="form-group">
+                <label for="dnSelect">Chọn đường kính danh nghĩa (DN):</label>
+                <select id="dnSelect" onchange="renderTable()">
+                    <!-- Tự động cập nhật theo danh sách DN của vật liệu -->
+                </select>
+            </div>
         </div>
 
         <div id="tableContainer"></div>
@@ -72,7 +76,6 @@
 </div>
 
 <script>
-    // Dữ liệu chi tiết từ PN10 trở lên
     const PIPE_DB = {
         hdpe: {
             pns: {
@@ -107,6 +110,12 @@
         }
     };
 
+    function onMaterialChange() {
+        updatePNList();
+        updateDNList();
+        renderTable();
+    }
+
     function updatePNList() {
         const mat = document.getElementById('materialSelect').value;
         const pnSelect = document.getElementById('pnSelect');
@@ -119,13 +128,31 @@
             opt.innerText = pns[key].name;
             pnSelect.appendChild(opt);
         }
-        renderTable();
+    }
+
+    function updateDNList() {
+        const mat = document.getElementById('materialSelect').value;
+        const dnSelect = document.getElementById('dnSelect');
+        dnSelect.innerHTML = '';
+
+        let optAll = document.createElement('option');
+        optAll.value = "all";
+        optAll.innerText = "-- Tất cả đường kính --";
+        dnSelect.appendChild(optAll);
+
+        const dns = PIPE_DB[mat].dns;
+        dns.forEach(dn => {
+            let opt = document.createElement('option');
+            opt.value = dn;
+            opt.innerText = typeof dn === 'number' ? `DN${dn}` : dn;
+            dnSelect.appendChild(opt);
+        });
     }
 
     function renderTable() {
         const mat = document.getElementById('materialSelect').value;
         const pnKey = document.getElementById('pnSelect').value;
-        const filterVal = document.getElementById('searchInput').value.trim();
+        const selectedDN = document.getElementById('dnSelect').value;
         
         const matData = PIPE_DB[mat];
         if (!matData.pns[pnKey]) return;
@@ -147,7 +174,7 @@
         for (let i = 0; i < matData.dns.length; i++) {
             let dn = matData.dns[i];
             
-            if (filterVal && !dn.toString().includes(filterVal)) continue;
+            if (selectedDN !== "all" && dn.toString() !== selectedDN.toString()) continue;
             
             count++;
             html += `<tr>`;
@@ -169,7 +196,7 @@
         document.getElementById('tableContainer').innerHTML = html;
     }
 
-    window.onload = updatePNList;
+    window.onload = onMaterialChange;
 </script>
 </body>
 </html>
