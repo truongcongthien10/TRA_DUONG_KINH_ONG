@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn</title>
+    <style>
+        :root {
+            --excel-green: #107c41;
+            --section-title: #0f5257;
+            --section-bg: #e2efda;
+            --bg-color: #f0f4f1;
+            --card-bg: #ffffff;
+            --border-color: #c8d6c9;
+            --btn-blue: #0070c0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg-color); color: #242424; padding: 10px; }
+        .container { max-width: 650px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
+        .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 12px 10px; font-size: 1.05rem; font-weight: bold; }
+        .content { padding: 12px 15px; }
+
+        .form-group { display: flex; flex-direction: column; margin-bottom: 12px; }
+        label { font-size: 0.85rem; margin-bottom: 4px; font-weight: 600; color: #333; }
+        select { padding: 8px; border: 1px solid var(--border-color); background: #f9fbf9; border-radius: 4px; font-size: 0.95rem; outline: none; width: 100%; height: 38px; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85rem; }
+        th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
+        th { background: var(--section-bg); color: var(--section-title); font-weight: bold; }
+        tr:nth-child(even) { background: #fdfdfd; }
+        tr:hover { background: #f0f7f0; }
+
+        .search-box { display: flex; gap: 8px; margin-bottom: 12px; }
+        .search-box input { flex: 1; padding: 6px 10px; border: 1px solid var(--border-color); border-radius: 4px; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-bar">BẢNG TRA ĐƯỜNG KÍNH ỐNG TIÊU CHUẨN</div>
+    <div class="content">
+        
+        <div class="form-group">
+            <label for="materialSelect">Chọn loại vật liệu ống:</label>
+            <select id="materialSelect" onchange="renderTable()">
+                <option value="hdpe">Ống Nhựa HDPE (ISO 4427 / TCVN 7305)</option>
+                <option value="pvc">Ống Nhựa uPVC (ISO 1452 / TCVN 8491)</option>
+                <option value="ductile">Ống Gang Dẻo (ISO 2531 / TCVN 10177)</option>
+                <option value="steel">Ống Thép Cấp Nước (ASTM A53 / BS 1387)</option>
+            </select>
+        </div>
+
+        <div class="search-box">
+            <input type="number" id="searchInput" placeholder="Nhập đường kính D danh nghĩa (DN) để lọc nhanh..." oninput="renderTable()">
+        </div>
+
+        <div id="tableContainer"></div>
+
+    </div>
+</div>
+
+<script>
+    const PIPE_DATA = {
+        hdpe: {
+            name: "Ống HDPE (Hệ số nhám C = 140)",
+            headers: ["DN (mm)", "OD (mm)", "Độ dày PN10 (mm)", "ID PN10 (mm)", "Độ dày PN16 (mm)", "ID PN16 (mm)"],
+            rows: [
+                [63, 63, 3.8, 55.4, 5.8, 51.4],
+                [75, 75, 4.5, 66.0, 6.8, 61.4],
+                [90, 90, 5.4, 79.2, 8.2, 73.6],
+                [110, 110, 6.6, 96.8, 10.0, 90.0],
+                [160, 160, 9.5, 141.0, 14.6, 130.8],
+                [200, 200, 11.9, 176.2, 18.2, 163.6],
+                [225, 225, 13.4, 198.2, 20.5, 184.0],
+                [250, 250, 14.8, 220.4, 22.7, 204.6],
+                [315, 315, 18.7, 277.6, 28.6, 257.8],
+                [400, 400, 23.7, 352.6, 36.3, 327.4],
+                [500, 500, 29.7, 440.6, 45.4, 409.2]
+            ]
+        },
+        pvc: {
+            name: "Ống uPVC (Hệ số nhám C = 140)",
+            headers: ["DN (mm)", "OD (mm)", "Độ dày PN10 (mm)", "ID PN10 (mm)", "Độ dày PN16 (mm)", "ID PN16 (mm)"],
+            rows: [
+                [60, 60, 2.3, 55.4, 3.6, 52.8],
+                [75, 75, 2.9, 69.2, 4.5, 66.0],
+                [90, 90, 3.5, 83.0, 5.4, 79.2],
+                [110, 110, 4.2, 101.6, 6.6, 96.8],
+                [160, 160, 6.2, 147.6, 9.5, 141.0],
+                [200, 200, 7.7, 184.6, 11.9, 176.2],
+                [225, 225, 8.6, 207.8, 13.4, 198.2],
+                [250, 250, 9.6, 230.8, 14.8, 220.4],
+                [315, 315, 12.1, 290.8, 18.7, 277.6],
+                [400, 400, 15.3, 369.4, 23.7, 352.6]
+            ]
+        },
+        ductile: {
+            name: "Ống Gang Dẻo K9/C40 (Hệ số nhám C = 130)",
+            headers: ["DN (mm)", "OD (mm)", "Lớp lót vữa Xi măng (mm)", "Độ dày thành (mm)", "ID Thực tế (mm)"],
+            rows: [
+                [100, 118, 4.0, 6.0, 98.0],
+                [150, 170, 4.0, 6.0, 150.0],
+                [200, 222, 4.0, 6.3, 201.4],
+                [250, 274, 4.0, 6.8, 252.4],
+                [300, 326, 4.0, 7.2, 303.6],
+                [400, 429, 5.0, 8.1, 402.8],
+                [500, 532, 5.0, 9.0, 504.0],
+                [600, 635, 5.0, 9.9, 605.2],
+                [800, 842, 6.0, 11.7, 806.6],
+                [1000, 1048, 6.0, 13.5, 1009.0]
+            ]
+        },
+        steel: {
+            name: "Ống Thép Cấp Nước Sche40 (Hệ số nhám C = 120)",
+            headers: ["DN (inch / mm)", "OD (mm)", "Độ dày SCH40 (mm)", "ID Thực tế (mm)"],
+            rows: [
+                ['DN50 (2")', 60.3, 3.91, 52.48],
+                ['DN80 (3")', 88.9, 5.49, 77.92],
+                ['DN100 (4")', 114.3, 6.02, 102.26],
+                ['DN150 (6")', 168.3, 7.11, 154.08],
+                ['DN200 (8")', 219.1, 8.18, 202.74],
+                ['DN250 (10")', 273.0, 9.27, 254.46],
+                ['DN300 (12")', 323.8, 9.52, 304.76],
+                ['DN400 (16")', 406.4, 9.52, 387.36],
+                ['DN500 (20")', 508.0, 9.52, 488.96]
+            ]
+        }
+    };
+
+    function renderTable() {
+        const mat = document.getElementById('materialSelect').value;
+        const filterVal = document.getElementById('searchInput').value.trim();
+        const data = PIPE_DATA[mat];
+
+        let html = `<table><thead><tr>`;
+        data.headers.forEach(h => html += `<th>${h}</th>`);
+        html += `</tr></thead><tbody>`;
+
+        const filteredRows = data.rows.filter(row => {
+            if (!filterVal) return true;
+            return row[0].toString().includes(filterVal);
+        });
+
+        if (filteredRows.length === 0) {
+            html += `<tr><td colspan="${data.headers.length}">Không tìm thấy cỡ ống phù hợp</td></tr>`;
+        } else {
+            filteredRows.forEach(row => {
+                html += `<tr>`;
+                row.forEach(cell => html += `<td>${cell}</td>`);
+                html += `</tr>`;
+            });
+        }
+
+        html += `</tbody></table>`;
+        document.getElementById('tableContainer').innerHTML = html;
+    }
+
+    window.onload = renderTable;
+</script>
+</body>
+</html>
