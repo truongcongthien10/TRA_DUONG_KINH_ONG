@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn - 2026</title>
+    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn</title>
     <style>
         :root {
             --excel-green: #107c41;
@@ -12,7 +12,6 @@
             --bg-color: #f0f4f1;
             --card-bg: #ffffff;
             --border-color: #c8d6c9;
-            --btn-blue: #0070c0;
 
             /* Tone màu shade vàng rất nhạt và dịu mắt khi chọn ô */
             --focus-yellow-bg: #fffde6;
@@ -23,7 +22,7 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg-color); color: #242424; padding: 10px; }
         .container { max-width: 750px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
         .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 12px 10px; font-size: 1.05rem; font-weight: bold; }
-        .content { padding: 12px 15px; }
+        .content { padding: 15px; }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
         @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
@@ -51,66 +50,13 @@
             box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45), 0 3px 8px rgba(0,0,0,0.1);
         }
 
-        .filter-group { margin-bottom: 12px; }
-
-        .btn-save {
-            width: 100%;
-            background-color: var(--btn-blue);
-            color: #ffffff;
-            border: none;
-            padding: 9px;
-            font-size: 0.95rem;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 5px;
-            margin-bottom: 15px;
-            transition: opacity 0.2s;
-        }
-        .btn-save:active { opacity: 0.85; }
-
-        .section-header-flex {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--section-bg);
-            border-bottom: 2px solid var(--excel-green);
-            padding: 6px 10px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            border-radius: 4px 4px 0 0;
-        }
-
-        .section-title {
-            font-weight: 700;
-            color: var(--section-title);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        .btn-reset {
-            background-color: #d9534f;
-            color: white;
-            border: none;
-            padding: 3px 8px;
-            font-size: 0.75rem;
-            font-weight: bold;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-        .btn-reset:active { opacity: 0.8; }
+        .filter-group { margin-bottom: 15px; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.85rem; }
         th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
         th { background: var(--section-bg); color: var(--section-title); font-weight: bold; }
         tr:nth-child(even) { background: #fdfdfd; }
         tr:hover { background: #f0f7f0; }
-
-        /* Bảng lịch sử */
-        .history-table-container { overflow-x: auto; margin-top: 5px; }
-        .history-table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
-        .history-table th { background-color: #e8f0e8; color: #107c41; }
-        .no-history { text-align: center; color: #777; font-size: 0.8rem; padding: 10px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -132,7 +78,7 @@
             
             <div class="form-group">
                 <label for="pnSelect">Cấp áp lực / Cấp độ dày:</label>
-                <select id="pnSelect" onchange="renderTable()">
+                <select id="pnSelect" onchange="onPNChange()">
                     <!-- Tự động cập nhật theo vật liệu -->
                 </select>
             </div>
@@ -142,36 +88,12 @@
             <div class="form-group">
                 <label for="dnSelect">Chọn đường kính danh nghĩa (DN):</label>
                 <select id="dnSelect" onchange="renderTable()">
-                    <!-- Tự động cập nhật theo danh sách DN của vật liệu -->
+                    <!-- Tự động cập nhật theo Cấp Áp Lực lựa chọn -->
                 </select>
             </div>
         </div>
 
-        <button class="btn-save" onclick="saveCurrentSearch()">Lưu Lựa Chọn Tra Cứu Vào Lịch Sử</button>
-
         <div id="tableContainer"></div>
-
-        <!-- PHẦN LỊCH SỬ LƯU TRỮ 10 GIÁ TRỊ -->
-        <div class="section-header-flex">
-            <span class="section-title">Lịch Sử 10 Lần Tra Cứu Gần Nhất</span>
-            <button class="btn-reset" onclick="resetHistory()">Reset Dữ Liệu</button>
-        </div>
-        
-        <div class="history-table-container">
-            <table class="history-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Vật Liệu</th>
-                        <th>Cấp Áp / Cấp Dày</th>
-                        <th>Kích Thước Tra Cứu</th>
-                    </tr>
-                </thead>
-                <tbody id="historyBody">
-                    <!-- Lịch sử tra cứu chèn vào đây -->
-                </tbody>
-            </table>
-        </div>
 
     </div>
 </div>
@@ -258,6 +180,11 @@
         renderTable();
     }
 
+    function onPNChange() {
+        updateDNList();
+        renderTable();
+    }
+
     function updatePNList() {
         const mat = document.getElementById('materialSelect').value;
         const pnSelect = document.getElementById('pnSelect');
@@ -272,9 +199,12 @@
         }
     }
 
+    /* RÀNG BUỘC: Chỉ liệt kê các đường kính DN có tồn tại dữ liệu ở cấp áp lực đã chọn */
     function updateDNList() {
         const mat = document.getElementById('materialSelect').value;
+        const pnKey = document.getElementById('pnSelect').value;
         const dnSelect = document.getElementById('dnSelect');
+        
         dnSelect.innerHTML = '';
 
         let optAll = document.createElement('option');
@@ -282,12 +212,19 @@
         optAll.innerText = "-- Tất cả đường kính --";
         dnSelect.appendChild(optAll);
 
-        const dns = PIPE_DB[mat].dns;
-        dns.forEach(dn => {
-            let opt = document.createElement('option');
-            opt.value = dn;
-            opt.innerText = typeof dn === 'number' ? `DN${dn}` : dn;
-            dnSelect.appendChild(opt);
+        const matData = PIPE_DB[mat];
+        if (!matData || !matData.pns[pnKey]) return;
+
+        const pnData = matData.pns[pnKey];
+
+        matData.dns.forEach((dn, index) => {
+            // Kiểm tra chỉ lấy những DN có độ dày hợp lệ (> 0) cho PN được chọn
+            if (pnData.e[index] !== undefined && pnData.e[index] !== 0) {
+                let opt = document.createElement('option');
+                opt.value = dn;
+                opt.innerText = typeof dn === 'number' ? `DN${dn}` : dn;
+                dnSelect.appendChild(opt);
+            }
         });
     }
 
@@ -297,7 +234,7 @@
         const selectedDN = document.getElementById('dnSelect').value;
         
         const matData = PIPE_DB[mat];
-        if (!matData.pns[pnKey]) return;
+        if (!matData || !matData.pns[pnKey]) return;
         const pnData = matData.pns[pnKey];
 
         let html = `<table><thead><tr>`;
@@ -316,8 +253,8 @@
         for (let i = 0; i < matData.dns.length; i++) {
             let dn = matData.dns[i];
             
+            if (pnData.e[i] === 0 || pnData.e[i] === undefined) continue;
             if (selectedDN !== "all" && dn.toString() !== selectedDN.toString()) continue;
-            if (pnData.e[i] === 0) continue;
 
             count++;
             html += `<tr>`;
@@ -339,64 +276,8 @@
         document.getElementById('tableContainer').innerHTML = html;
     }
 
-    /* CHỨC NĂNG LƯU TRỮ LỊCH SỬ 10 LẦN TRA CỨU */
-    function saveCurrentSearch() {
-        const matSelect = document.getElementById('materialSelect');
-        const pnSelect = document.getElementById('pnSelect');
-        const dnSelect = document.getElementById('dnSelect');
-
-        const matText = matSelect.options[matSelect.selectedIndex].text.split(' (')[0];
-        const pnText = pnSelect.options[pnSelect.selectedIndex].text;
-        const dnText = dnSelect.options[dnSelect.selectedIndex].text;
-
-        const newItem = {
-            material: matText,
-            pn: pnText,
-            dn: dnText
-        };
-
-        let history = JSON.parse(localStorage.getItem('pipe_lookup_history')) || [];
-        history.unshift(newItem);
-
-        if (history.length > 10) {
-            history = history.slice(0, 10);
-        }
-
-        localStorage.setItem('pipe_lookup_history', JSON.stringify(history));
-        renderHistory();
-    }
-
-    function renderHistory() {
-        const history = JSON.parse(localStorage.getItem('pipe_lookup_history')) || [];
-        const tbody = document.getElementById('historyBody');
-
-        if (history.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="4" class="no-history">Chưa có lịch sử tra cứu nào được lưu</td></tr>';
-            return;
-        }
-
-        let html = '';
-        history.forEach((item, index) => {
-            html += `<tr>
-                <td>${index + 1}</td>
-                <td style="font-weight:600;">${item.material}</td>
-                <td>${item.pn}</td>
-                <td style="color:#107c41; font-weight:bold;">${item.dn}</td>
-            </tr>`;
-        });
-        tbody.innerHTML = html;
-    }
-
-    function resetHistory() {
-        if (confirm("Anh có chắc chắn muốn xóa toàn bộ 10 lịch sử tra cứu gần nhất?")) {
-            localStorage.removeItem('pipe_lookup_history');
-            renderHistory();
-        }
-    }
-
     window.onload = function() {
         onMaterialChange();
-        renderHistory();
     };
 </script>
 </body>
