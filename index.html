@@ -57,6 +57,17 @@
         th { background: var(--section-bg); color: var(--section-title); font-weight: bold; }
         tr:nth-child(even) { background: #fdfdfd; }
         tr:hover { background: #f0f7f0; }
+
+        /* Định dạng Footer Copyright góc dưới bên trái */
+        .footer-copyright {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-color);
+            text-align: left;
+            font-size: 0.75rem;
+            color: #666;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -94,6 +105,11 @@
         </div>
 
         <div id="tableContainer"></div>
+
+        <!-- Bổ sung Copyright góc dưới bên trái -->
+        <div class="footer-copyright">
+            Copyright © PHÒNG KỸ THUẬT - HueWACO
+        </div>
 
     </div>
 </div>
@@ -199,7 +215,6 @@
         }
     }
 
-    /* RÀNG BUỘC: Chỉ liệt kê các đường kính DN có tồn tại dữ liệu ở cấp áp lực đã chọn */
     function updateDNList() {
         const mat = document.getElementById('materialSelect').value;
         const pnKey = document.getElementById('pnSelect').value;
@@ -218,7 +233,6 @@
         const pnData = matData.pns[pnKey];
 
         matData.dns.forEach((dn, index) => {
-            // Kiểm tra chỉ lấy những DN có độ dày hợp lệ (> 0) cho PN được chọn
             if (pnData.e[index] !== undefined && pnData.e[index] !== 0) {
                 let opt = document.createElement('option');
                 opt.value = dn;
