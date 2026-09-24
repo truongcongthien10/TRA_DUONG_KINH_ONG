@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn - HueWACO</title>
+    <title>Bảng Tra Đường Kính Ống Cấp Nước - HueWACO</title>
     <style>
         :root {
             --excel-green: #107c41;
@@ -41,6 +41,16 @@
             width: 100%; 
             height: 38px; 
             transition: all 0.2s ease-in-out;
+        }
+
+        /* BỎ TÍCH TĂNG/GIẢM TRÊN Ô NHẬP NGUYÊN NGUYÊN CỦA INPUT NUMBER */
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
         }
 
         select:focus, input[type="number"]:focus {
@@ -99,7 +109,7 @@
 <body>
 
 <div class="container">
-    <div class="header-bar">BẢNG TRA ĐƯỜNG KÍNH & MẶT CẮT ƯỚT ỐNG TIÊU CHUẨN</div>
+    <div class="header-bar">BẢNG TRA ĐƯỜNG KÍNH ỐNG CẤP NƯỚC</div>
     <div class="content">
         
         <div class="form-grid">
@@ -273,12 +283,13 @@
 
         let html = `<table><thead><tr>`;
         
+        // CỘT MẶT CẮT ƯỚT ĐƯỢC CHUYỂN LÊN ĐẦU (SAU CỘT ĐƯỜNG KÍNH)
         if (mat === 'hdpe' || mat === 'pvc') {
-            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Mặt cắt ướt A</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (mm²)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'ductile') {
-            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Mặt cắt ướt A</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (mm²)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'steel') {
-            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Mặt cắt ướt A</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (mm²)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         }
 
         if (inputQVal > 0) {
@@ -302,19 +313,13 @@
             let id_mm = (od - 2 * e - 2 * lining);
             let id_str = id_mm.toFixed(1);
 
-            // TÍNH MẶT CẮT ƯỚT A
-            let d_m = id_mm / 1000;
-            let area_m2 = (Math.PI * Math.pow(d_m, 2)) / 4;
-            let area_cm2 = area_m2 * 10000;
+            // TÍNH MẶT CẮT ƯỚT A (ĐƠN VỊ mm2)
+            let area_mm2 = (Math.PI * Math.pow(id_mm, 2)) / 4;
+            // Định dạng hiển thị số nguyên có phân cách hàng nghìn (ví dụ: 5,102)
+            let area_str = Math.round(area_mm2).toLocaleString('en-US');
 
-            let area_str = "";
-            if (id_mm >= 200) {
-                area_str = `<b>${area_m2.toFixed(4)}</b> m²`;
-            } else {
-                area_str = `<b>${area_cm2.toFixed(2)}</b> cm²`;
-            }
-
-            // TÍNH VẬN TỐC FLOW v = Q / A
+            // TÍNH VẬN TỐC FLOW v = Q / A (A tính bằng m2)
+            let area_m2 = area_mm2 / 1000000;
             let velocity_str = "-";
             if (q_m3s > 0 && area_m2 > 0) {
                 let v = q_m3s / area_m2;
@@ -330,11 +335,11 @@
 
             html += `<tr>`;
             if (mat === 'hdpe' || mat === 'pvc') {
-                html += `<td><b>${dn}</b></td><td>${dn}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-highlight-area">${area_str}</td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td>${dn}</td><td class="col-highlight-area"><b>${area_str}</b></td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td><b>${weight}</b></td>`;
             } else if (mat === 'ductile') {
-                html += `<td><b>${dn}</b></td><td>${od}</td><td>${lining}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-highlight-area">${area_str}</td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td>${od}</td><td class="col-highlight-area"><b>${area_str}</b></td><td>${lining}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td><b>${weight}</b></td>`;
             } else if (mat === 'steel') {
-                html += `<td><b>${dn}</b></td><td>${od}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-highlight-area">${area_str}</td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td>${od}</td><td class="col-highlight-area"><b>${area_str}</b></td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td><b>${weight}</b></td>`;
             }
 
             if (inputQVal > 0) {
@@ -345,7 +350,7 @@
         }
 
         if (count === 0) {
-            let colSpan = (inputQVal > 0) ? 7 : 6;
+            let colSpan = (inputQVal > 0) ? 8 : 7;
             html += `<tr><td colspan="${colSpan}">Không tìm thấy cỡ ống phù hợp</td></tr>`;
         }
 
