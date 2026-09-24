@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn</title>
+    <title>Bảng Tra Đường Kính Ống Tiêu Chuẩn - HueWACO</title>
     <style>
         :root {
             --excel-green: #107c41;
+            --excel-green-dark: #0b592e;
             --section-title: #0f5257;
             --section-bg: #e2efda;
             --bg-color: #f0f4f1;
@@ -19,42 +20,62 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg-color); color: #242424; padding: 10px; }
-        .container { max-width: 850px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
-        .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 12px 10px; font-size: 1.05rem; font-weight: bold; }
+        .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
+        .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 14px 10px; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
         .content { padding: 15px; }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
-        @media (max-width: 480px) { .form-grid { grid-template-columns: 1fr; } }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
         
         .form-group { display: flex; flex-direction: column; }
-        label { font-size: 0.85rem; margin-bottom: 4px; font-weight: 600; color: #333; }
+        label { font-size: 0.82rem; margin-bottom: 4px; font-weight: 700; color: #333; }
         
-        select { 
+        select, input[type="number"] { 
             padding: 8px; 
-            border: 1px solid var(--border-color); 
+            border: 1.5px solid var(--border-color); 
             background: #f9fbf9; 
             border-radius: 4px; 
-            font-size: 0.9rem; 
+            font-size: 0.88rem; 
+            font-weight: 600;
             outline: none; 
             width: 100%; 
             height: 38px; 
             transition: all 0.2s ease-in-out;
         }
 
-        select:focus {
+        select:focus, input[type="number"]:focus {
             background-color: var(--focus-yellow-bg);
             border-color: var(--focus-yellow-border);
-            transform: translateY(-1px);
-            box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45), 0 3px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45);
         }
 
-        .filter-group { margin-bottom: 15px; }
+        /* KHỐI TÍNH NHANH VẬN TỐC DÒNG CHẢY */
+        .calc-tool-bar {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 6px;
+            padding: 10px 12px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .calc-tool-title { font-size: 0.82rem; font-weight: 800; color: #0369a1; text-transform: uppercase; }
+
+        .action-btns { display: flex; gap: 8px; margin-bottom: 10px; justify-content: flex-end; }
+        .btn-action { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #334155; }
+        .btn-action:hover { background: #cbd5e1; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.85rem; }
-        th, td { border: 1px solid var(--border-color); padding: 8px; text-align: center; }
-        th { background: var(--section-bg); color: var(--section-title); font-weight: bold; }
+        th, td { border: 1px solid var(--border-color); padding: 7px 8px; text-align: center; }
+        th { background: var(--section-bg); color: var(--section-title); font-weight: 800; font-size: 0.82rem; }
         tr:nth-child(even) { background: #fdfdfd; }
         tr:hover { background: #f0f7f0; }
+
+        .col-highlight-id { color: #107c41; font-weight: 800; }
+        .col-highlight-area { color: #0284c7; font-weight: 800; }
+        .col-highlight-v { color: #b91c1c; font-weight: 800; }
 
         .footer-copyright {
             margin-top: 15px;
@@ -63,19 +84,27 @@
             text-align: left;
             font-size: 0.75rem;
             color: #666;
-            font-weight: 600;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .container { box-shadow: none; border: none; max-width: 100%; }
+            .calc-tool-bar, .action-btns { display: none; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header-bar">BẢNG TRA ĐƯỜNG KÍNH ỐNG TIÊU CHUẨN</div>
+    <div class="header-bar">BẢNG TRA ĐƯỜNG KÍNH & MẶT CẮT ƯỚT ỐNG TIÊU CHUẨN</div>
     <div class="content">
         
         <div class="form-grid">
             <div class="form-group">
-                <label for="materialSelect">Vật liệu ống:</label>
+                <label for="materialSelect">1. Vật liệu ống:</label>
                 <select id="materialSelect" onchange="onMaterialChange()">
                     <option value="hdpe" selected>Ống Nhựa HDPE (ISO 4427 / TCVN 7305)</option>
                     <option value="pvc">Ống Nhựa uPVC (ISO 1452 / TCVN 8491)</option>
@@ -85,26 +114,39 @@
             </div>
             
             <div class="form-group">
-                <label for="pnSelect">Cấp áp lực / Cấp độ dày:</label>
-                <select id="pnSelect" onchange="onPNChange()">
-                    <!-- Tự động cập nhật -->
-                </select>
+                <label for="pnSelect">2. Cấp áp lực / Độ dày:</label>
+                <select id="pnSelect" onchange="onPNChange()"></select>
+            </div>
+
+            <div class="form-group">
+                <label for="dnSelect">3. Đường kính (DN):</label>
+                <select id="dnSelect" onchange="renderTable()"></select>
             </div>
         </div>
 
-        <div class="filter-group">
-            <div class="form-group">
-                <label for="dnSelect">Chọn đường kính danh nghĩa (DN):</label>
-                <select id="dnSelect" onchange="renderTable()">
-                    <!-- Tự động cập nhật -->
+        <!-- KHỐI TÍNH VẬN TỐC DÒNG CHẢY -->
+        <div class="calc-tool-bar">
+            <span class="calc-tool-title">⚡ Tính nhanh vận tốc chảy (v):</span>
+            <div style="display:flex; align-items:center; gap:6px;">
+                <label style="margin:0; font-size:0.78rem;">Lưu lượng Q:</label>
+                <input type="number" id="inputQ" placeholder="Nhập Q..." style="width:110px; height:32px;" oninput="renderTable()">
+                <select id="unitQ" style="width:85px; height:32px; padding:4px;" onchange="renderTable()">
+                    <option value="m3h" selected>m³/h</option>
+                    <option value="ls">l/s</option>
                 </select>
             </div>
+            <span style="font-size:0.75rem; color:#64748b; font-style:italic;">(Vận tốc v = Q / A sẽ tự động tính trong bảng)</span>
+        </div>
+
+        <div class="action-btns">
+            <button class="btn-action" onclick="window.print()">🖨️ In / Xuất PDF</button>
         </div>
 
         <div id="tableContainer"></div>
 
         <div class="footer-copyright">
-            Copyright © PHÒNG KỸ THUẬT - HueWACO
+            <div>Copyright © <b>PHÒNG KỸ THUẬT - HueWACO</b></div>
+            <div>Hệ thống tra cứu thủy lực chuẩn ISO / TCVN</div>
         </div>
 
     </div>
@@ -132,30 +174,12 @@
         },
         hdpe: {
             pns: {
-                "pn10": {
-                    name: "PN10 (SDR17)",
-                    e: [1.8, 2.0, 2.4, 3.0, 3.8, 4.5, 5.4, 6.6, 7.4, 8.3, 9.5, 10.7, 11.9, 13.4, 14.8, 16.6, 18.7, 21.1, 23.7, 26.7, 29.7, 33.2, 37.4, 42.1, 47.4, 53.3, 59.3, 71.1, 82.9]
-                },
-                "pn6": {
-                    name: "PN6 (SDR26)",
-                    e: [0, 0, 0, 0, 0, 0, 0, 4.2, 4.8, 5.4, 6.2, 6.9, 7.7, 8.6, 9.6, 10.7, 12.1, 13.6, 15.3, 17.2, 19.1, 21.4, 24.1, 27.2, 30.6, 34.4, 38.2, 45.9, 53.5]
-                },
-                "pn8": {
-                    name: "PN8 (SDR21)",
-                    e: [0, 0, 0, 0, 0, 0, 4.3, 5.3, 6.0, 6.7, 7.7, 8.6, 9.6, 10.8, 11.9, 13.4, 15.0, 16.9, 19.1, 21.5, 23.9, 26.7, 30.0, 33.9, 38.1, 42.9, 47.7, 57.2, 66.7]
-                },
-                "pn12.5": {
-                    name: "PN12.5 (SDR13.6)",
-                    e: [2.0, 2.4, 3.0, 3.7, 4.7, 5.6, 6.7, 8.1, 9.2, 10.3, 11.8, 13.3, 14.7, 16.6, 18.4, 20.6, 23.2, 26.1, 29.4, 33.1, 36.8, 41.2, 46.3, 52.2, 58.8, 66.1, 73.5, 88.2, 102.9]
-                },
-                "pn16": {
-                    name: "PN16 (SDR11)",
-                    e: [2.3, 3.0, 3.7, 4.6, 5.8, 6.8, 8.2, 10.0, 11.4, 12.7, 14.6, 16.4, 18.2, 20.5, 22.7, 25.4, 28.6, 32.2, 36.3, 40.9, 45.4, 50.8, 57.2, 64.5, 72.6, 81.7, 90.8, 108.9, 127.1]
-                },
-                "pn20": {
-                    name: "PN20 (SDR9)",
-                    e: [2.8, 3.6, 4.5, 5.6, 7.1, 8.4, 10.1, 12.3, 14.0, 15.7, 17.9, 20.1, 22.4, 25.2, 27.9, 31.3, 35.2, 39.7, 44.7, 50.3, 55.8, 62.5, 70.3, 79.3, 89.3, 100.5, 111.6, 133.9, 156.2]
-                }
+                "pn10": { name: "PN10 (SDR17)", e: [1.8, 2.0, 2.4, 3.0, 3.8, 4.5, 5.4, 6.6, 7.4, 8.3, 9.5, 10.7, 11.9, 13.4, 14.8, 16.6, 18.7, 21.1, 23.7, 26.7, 29.7, 33.2, 37.4, 42.1, 47.4, 53.3, 59.3, 71.1, 82.9] },
+                "pn6": { name: "PN6 (SDR26)", e: [0, 0, 0, 0, 0, 0, 0, 4.2, 4.8, 5.4, 6.2, 6.9, 7.7, 8.6, 9.6, 10.7, 12.1, 13.6, 15.3, 17.2, 19.1, 21.4, 24.1, 27.2, 30.6, 34.4, 38.2, 45.9, 53.5] },
+                "pn8": { name: "PN8 (SDR21)", e: [0, 0, 0, 0, 0, 0, 4.3, 5.3, 6.0, 6.7, 7.7, 8.6, 9.6, 10.8, 11.9, 13.4, 15.0, 16.9, 19.1, 21.5, 23.9, 26.7, 30.0, 33.9, 38.1, 42.9, 47.7, 57.2, 66.7] },
+                "pn12.5": { name: "PN12.5 (SDR13.6)", e: [2.0, 2.4, 3.0, 3.7, 4.7, 5.6, 6.7, 8.1, 9.2, 10.3, 11.8, 13.3, 14.7, 16.6, 18.4, 20.6, 23.2, 26.1, 29.4, 33.1, 36.8, 41.2, 46.3, 52.2, 58.8, 66.1, 73.5, 88.2, 102.9] },
+                "pn16": { name: "PN16 (SDR11)", e: [2.3, 3.0, 3.7, 4.6, 5.8, 6.8, 8.2, 10.0, 11.4, 12.7, 14.6, 16.4, 18.2, 20.5, 22.7, 25.4, 28.6, 32.2, 36.3, 40.9, 45.4, 50.8, 57.2, 64.5, 72.6, 81.7, 90.8, 108.9, 127.1] },
+                "pn20": { name: "PN20 (SDR9)", e: [2.8, 3.6, 4.5, 5.6, 7.1, 8.4, 10.1, 12.3, 14.0, 15.7, 17.9, 20.1, 22.4, 25.2, 27.9, 31.3, 35.2, 39.7, 44.7, 50.3, 55.8, 62.5, 70.3, 79.3, 89.3, 100.5, 111.6, 133.9, 156.2] }
             },
             dns: HDPE_DNS
         },
@@ -235,6 +259,14 @@
         const pnKey = document.getElementById('pnSelect').value;
         const selectedDN = document.getElementById('dnSelect').value;
         
+        // Dữ liệu nhập Q
+        const inputQVal = parseFloat(document.getElementById('inputQ').value) || 0;
+        const unitQVal = document.getElementById('unitQ').value;
+        let q_m3s = 0;
+        if (inputQVal > 0) {
+            q_m3s = (unitQVal === 'm3h') ? (inputQVal / 3600) : (inputQVal / 1000);
+        }
+
         const matData = PIPE_DB[mat];
         if (!matData || !matData.pns[pnKey]) return;
         const pnData = matData.pns[pnKey];
@@ -242,11 +274,15 @@
         let html = `<table><thead><tr>`;
         
         if (mat === 'hdpe' || mat === 'pvc') {
-            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Mặt cắt ướt A</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'ductile') {
-            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Mặt cắt ướt A</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'steel') {
-            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Mặt cắt ướt A</th><th>Trọng lượng (kg/m)</th>`;
+        }
+
+        if (inputQVal > 0) {
+            html += `<th style="background:#fef2f2; color:#b91c1c;">Vận tốc v (m/s)</th>`;
         }
         
         html += `</tr></thead><tbody>`;
@@ -263,7 +299,27 @@
             
             let od = (mat === 'ductile' || mat === 'steel') ? matData.ods[i] : dn;
             let lining = (mat === 'ductile') ? pnData.lining[i] : 0;
-            let id = (od - 2 * e - 2 * lining).toFixed(1);
+            let id_mm = (od - 2 * e - 2 * lining);
+            let id_str = id_mm.toFixed(1);
+
+            // TÍNH MẶT CẮT ƯỚT A
+            let d_m = id_mm / 1000;
+            let area_m2 = (Math.PI * Math.pow(d_m, 2)) / 4;
+            let area_cm2 = area_m2 * 10000;
+
+            let area_str = "";
+            if (id_mm >= 200) {
+                area_str = `<b>${area_m2.toFixed(4)}</b> m²`;
+            } else {
+                area_str = `<b>${area_cm2.toFixed(2)}</b> cm²`;
+            }
+
+            // TÍNH VẬN TỐC FLOW v = Q / A
+            let velocity_str = "-";
+            if (q_m3s > 0 && area_m2 > 0) {
+                let v = q_m3s / area_m2;
+                velocity_str = v.toFixed(2);
+            }
 
             let weight = "-";
             if (mat === 'hdpe') {
@@ -274,17 +330,23 @@
 
             html += `<tr>`;
             if (mat === 'hdpe' || mat === 'pvc') {
-                html += `<td><b>${dn}</b></td><td>${dn}</td><td>${e}</td><td><b style="color:#107c41;">${id}</b></td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td>${dn}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-highlight-area">${area_str}</td><td><b>${weight}</b></td>`;
             } else if (mat === 'ductile') {
-                html += `<td><b>${dn}</b></td><td>${od}</td><td>${lining}</td><td>${e}</td><td><b style="color:#107c41;">${id}</b></td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td>${od}</td><td>${lining}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-highlight-area">${area_str}</td><td><b>${weight}</b></td>`;
             } else if (mat === 'steel') {
-                html += `<td><b>${dn}</b></td><td>${od}</td><td>${e}</td><td><b style="color:#107c41;">${id}</b></td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td>${od}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-highlight-area">${area_str}</td><td><b>${weight}</b></td>`;
             }
+
+            if (inputQVal > 0) {
+                html += `<td class="col-highlight-v">${velocity_str} m/s</td>`;
+            }
+
             html += `</tr>`;
         }
 
         if (count === 0) {
-            html += `<tr><td colspan="6">Không tìm thấy cỡ ống phù hợp</td></tr>`;
+            let colSpan = (inputQVal > 0) ? 7 : 6;
+            html += `<tr><td colspan="${colSpan}">Không tìm thấy cỡ ống phù hợp</td></tr>`;
         }
 
         html += `</tbody></table>`;
