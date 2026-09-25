@@ -43,7 +43,7 @@
             transition: all 0.2s ease-in-out;
         }
 
-        /* BỎ TÍCH TĂNG/GIẢM TRÊN Ô NHẬP NGUYÊN NGUYÊN CỦA INPUT NUMBER */
+        /* BỎ TÍCH TĂNG/GIẢM TRÊN Ô NHẬP INPUT NUMBER */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -283,13 +283,13 @@
 
         let html = `<table><thead><tr>`;
         
-        // CỘT MẶT CẮT ƯỚT ĐƯỢC CHUYỂN LÊN ĐẦU (SAU CỘT ĐƯỜNG KÍNH)
+        // CỘT MẶT CẮT ƯỚT TÍNH BẰNG m2 VÀ ĐẶT SAU CỘT ĐƯỜNG KÍNH
         if (mat === 'hdpe' || mat === 'pvc') {
-            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (mm²)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (m²)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'ductile') {
-            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (mm²)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (m²)</th><th>Lót Xi măng (mm)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'steel') {
-            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (mm²)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
+            html += `<th>DN (inch/mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (m²)</th><th>Độ dày thành (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         }
 
         if (inputQVal > 0) {
@@ -313,13 +313,12 @@
             let id_mm = (od - 2 * e - 2 * lining);
             let id_str = id_mm.toFixed(1);
 
-            // TÍNH MẶT CẮT ƯỚT A (ĐƠN VỊ mm2)
-            let area_mm2 = (Math.PI * Math.pow(id_mm, 2)) / 4;
-            // Định dạng hiển thị số nguyên có phân cách hàng nghìn (ví dụ: 5,102)
-            let area_str = Math.round(area_mm2).toLocaleString('en-US');
+            // TÍNH MẶT CẮT ƯỚT A (ĐƠN VỊ m2 - LẤY 4 CHỮ SỐ THẬP PHÂN)
+            let d_m = id_mm / 1000;
+            let area_m2 = (Math.PI * Math.pow(d_m, 2)) / 4;
+            let area_str = area_m2.toFixed(4);
 
-            // TÍNH VẬN TỐC FLOW v = Q / A (A tính bằng m2)
-            let area_m2 = area_mm2 / 1000000;
+            // TÍNH VẬN TỐC FLOW v = Q / A
             let velocity_str = "-";
             if (q_m3s > 0 && area_m2 > 0) {
                 let v = q_m3s / area_m2;
