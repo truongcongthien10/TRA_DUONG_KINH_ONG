@@ -2,22 +2,22 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Bảng Tra Đường Kính Ống Cấp Nước - HueWACO</title>
     <style>
         :root {
-            --excel-green: #107c41;
-            --excel-green-dark: #0b592e;
-            --section-title: #0f5257;
-            --section-bg: #e2efda;
-            --bg-color: #f0f4f1;
+            --brand-primary: #0f766e;
+            --brand-primary-dark: #115e59;
+            --brand-accent: #0284c7;
+            --section-bg: #ccfbf1;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
-            --border-color: #c8d6c9;
+            --border-color: #cbd5e1;
 
             --focus-yellow-bg: #fffde6;
-            --focus-yellow-border: #e6b800;
+            --focus-yellow-border: #d97706;
 
-            /* KHAI BÁO HỆ THỐNG FONT CHUẨN UI/UX */
+            /* HỆ THỐNG FONT TỐI ƯU UI/UX */
             --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             --font-number: "Consolas", "Roboto Mono", "Courier New", monospace;
         }
@@ -26,62 +26,68 @@
         body { 
             font-family: var(--font-main); 
             background: var(--bg-color); 
-            color: #1e293b; 
-            padding: 10px; 
+            color: #0f172a; 
+            padding: 8px; 
             -webkit-font-smoothing: antialiased;
         }
 
         .container { 
-            max-width: 1000px; 
+            max-width: 1050px; 
             margin: 0 auto; 
             background: var(--card-bg); 
-            border-radius: 8px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            border-radius: 10px; 
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06); 
             overflow: hidden; 
             border: 1px solid var(--border-color); 
         }
 
         /* TIÊU ĐỀ CHÍNH */
         .header-bar { 
-            background: var(--excel-green); 
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark)); 
             color: #ffffff; 
             text-align: center; 
-            padding: 14px 10px; 
-            font-size: 1.2rem; 
+            padding: 16px 12px; 
+            font-size: 1.15rem; 
             font-weight: 800; 
             text-transform: uppercase; 
             letter-spacing: 0.6px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .content { padding: 15px; }
+        .content { padding: 12px; }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
-        
+        /* BỐ CỤC ĐIỀU KHIỂN RỜI RẠC/RESPONSIVE */
+        .form-grid { 
+            display: grid; 
+            grid-template-columns: repeat(3, 1fr); 
+            gap: 10px; 
+            margin-bottom: 12px; 
+        }
+
         .form-group { display: flex; flex-direction: column; }
         label { 
-            font-size: 0.85rem; 
-            margin-bottom: 5px; 
+            font-size: 0.82rem; 
+            margin-bottom: 4px; 
             font-weight: 700; 
             color: #334155; 
         }
         
         select, input[type="number"] { 
             font-family: var(--font-main);
-            padding: 8px 10px; 
+            padding: 6px 10px; 
             border: 1.5px solid var(--border-color); 
             background: #f8fafc; 
-            border-radius: 5px; 
-            font-size: 0.9rem; 
+            border-radius: 6px; 
+            font-size: 0.88rem; 
             font-weight: 600;
             color: #0f172a;
             outline: none; 
             width: 100%; 
-            height: 40px; 
+            height: 38px; 
             transition: all 0.2s ease-in-out;
         }
 
-        /* BỎ TÍCH TĂNG/GIẢM TRÊN Ô NHẬP INPUT NUMBER */
+        /* BỎ MŨI TÊN TRÊN INPUT NUMBER */
         input[type="number"]::-webkit-outer-spin-button,
         input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -91,88 +97,106 @@
             -moz-appearance: textfield;
             font-family: var(--font-number);
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.92rem;
         }
 
         select:focus, input[type="number"]:focus {
             background-color: var(--focus-yellow-bg);
             border-color: var(--focus-yellow-border);
-            box-shadow: 0 0 0 3px rgba(230, 184, 0, 0.25);
+            box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2);
         }
 
         /* KHỐI TÍNH NHANH VẬN TỐC DÒNG CHẢY */
         .calc-tool-bar {
             background: #f0f9ff;
             border: 1.5px solid #bae6fd;
-            border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 15px;
+            border-radius: 8px;
+            padding: 10px 12px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
         }
         .calc-tool-title { 
-            font-size: 0.85rem; 
+            font-size: 0.82rem; 
             font-weight: 800; 
             color: #0369a1; 
             text-transform: uppercase; 
-            letter-spacing: 0.3px;
         }
 
         .action-btns { display: flex; gap: 8px; margin-bottom: 10px; justify-content: flex-end; }
         .btn-action { 
             font-family: var(--font-main);
-            background: #e2e8f0; 
+            background: #f1f5f9; 
             border: 1px solid #cbd5e1; 
-            padding: 6px 14px; 
-            border-radius: 5px; 
-            font-size: 0.8rem; 
+            padding: 6px 12px; 
+            border-radius: 6px; 
+            font-size: 0.78rem; 
             font-weight: 700; 
             cursor: pointer; 
             color: #334155; 
             transition: all 0.2s;
         }
-        .btn-action:hover { background: #cbd5e1; color: #0f172a; }
+        .btn-action:hover { background: #e2e8f0; color: #0f172a; }
 
-        /* ĐỊNH DẠNG BẢNG DỮ LIỆU */
-        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        th, td { border: 1px solid var(--border-color); padding: 8px 10px; text-align: center; }
+        /* KHUNG CUỘN CHO BẢNG TRÊN ĐIỆN THOẠI (KHÔNG BỊ MẤT GÓC) */
+        .table-responsive-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #ffffff;
+            margin-top: 5px;
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            min-width: 650px; /* Đảm bảo bảng hiển thị đầy đủ tiêu chuẩn kể cả khi màn hình hẹp */
+        }
+
+        th, td { 
+            border: 1px solid #e2e8f0; 
+            padding: 8px 10px; 
+            text-align: center; 
+            white-space: nowrap; /* Tránh tràn vỡ dòng số liệu */
+        }
         
         th { 
-            background: var(--section-bg); 
-            color: var(--section-title); 
+            background: #f0fdfa; 
+            color: var(--brand-primary-dark); 
             font-weight: 800; 
-            font-size: 0.85rem; 
-            letter-spacing: 0.2px;
+            font-size: 0.82rem; 
+            position: sticky;
+            top: 0;
+            z-index: 2;
         }
 
         td { 
-            font-size: 0.9rem; 
+            font-size: 0.88rem; 
             font-weight: 600;
         }
 
         tr:nth-child(even) { background: #f8fafc; }
-        tr:hover { background: #f0f7f0; }
+        tr:hover { background: #f0fdf4; }
 
-        /* CÁC CỘT SỐ LIỆU DÙNG FONT ĐƠN CÁCH ĐỂ THẲNG HÀNG TỰ NHIÊN */
+        /* CÁC CỘT NỔI BẬT DÙNG FONT ĐƠN CÁCH */
         .col-highlight-id { 
-            color: #107c41; 
+            color: #0d9488; 
             font-weight: 800; 
             font-family: var(--font-number);
-            font-size: 0.95rem;
         }
         .col-highlight-area { 
             color: #0284c7; 
             font-weight: 800; 
             font-family: var(--font-number);
-            font-size: 0.95rem;
         }
         .col-highlight-v { 
             color: #b91c1c; 
             font-weight: 800; 
             font-family: var(--font-number);
-            font-size: 0.95rem;
         }
         .col-number {
             font-family: var(--font-number);
@@ -184,17 +208,31 @@
             padding-top: 10px;
             border-top: 1px dashed var(--border-color);
             text-align: left;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             color: #64748b;
             font-weight: 700;
             display: flex;
             justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        /* MEDIA QUERIES TỐI ƯU CHO ĐIỆN THOẠI DĐ */
+        @media (max-width: 640px) {
+            body { padding: 4px; }
+            .header-bar { font-size: 1rem; padding: 12px 8px; }
+            .content { padding: 8px; }
+            .form-grid { grid-template-columns: 1fr; gap: 8px; } /* Đưa về 1 cột dọc dễ chọn */
+            .calc-tool-bar { flex-direction: column; align-items: flex-start; gap: 6px; }
+            th, td { padding: 6px 8px; font-size: 0.8rem; }
+            .col-highlight-id, .col-highlight-area, .col-highlight-v { font-size: 0.85rem; }
         }
 
         @media print {
             body { background: #fff; padding: 0; }
             .container { box-shadow: none; border: none; max-width: 100%; }
             .calc-tool-bar, .action-btns { display: none; }
+            .table-responsive-wrapper { overflow: visible; border: none; }
         }
     </style>
 </head>
@@ -229,22 +267,25 @@
         <!-- KHỐI TÍNH VẬN TỐC DÒNG CHẢY -->
         <div class="calc-tool-bar">
             <span class="calc-tool-title">⚡ Tính nhanh vận tốc chảy (v):</span>
-            <div style="display:flex; align-items:center; gap:6px;">
-                <label style="margin:0; font-size:0.8rem; color:#0f172a;">Lưu lượng Q:</label>
-                <input type="number" id="inputQ" placeholder="Nhập Q..." style="width:110px; height:34px;" oninput="renderTable()">
-                <select id="unitQ" style="width:85px; height:34px; padding:4px;" onchange="renderTable()">
+            <div style="display:flex; align-items:center; gap:6px; width:100%; max-width:280px;">
+                <label style="margin:0; font-size:0.8rem; color:#0f172a; white-space:nowrap;">Lưu lượng Q:</label>
+                <input type="number" id="inputQ" placeholder="Nhập Q..." style="flex:1; height:34px;" oninput="renderTable()">
+                <select id="unitQ" style="width:80px; height:34px; padding:4px;" onchange="renderTable()">
                     <option value="m3h" selected>m³/h</option>
                     <option value="ls">l/s</option>
                 </select>
             </div>
-            <span style="font-size:0.78rem; color:#64748b; font-style:italic;">(Vận tốc v = Q / A sẽ tự động tính trong bảng)</span>
+            <span style="font-size:0.75rem; color:#64748b; font-style:italic;">(Vận tốc v = Q / A tự động tính trong bảng)</span>
         </div>
 
         <div class="action-btns">
             <button class="btn-action" onclick="window.print()">🖨️ In / Xuất PDF</button>
         </div>
 
-        <div id="tableContainer"></div>
+        <!-- KHUNG CUỘN NGHANH CHO BẢNG -->
+        <div class="table-responsive-wrapper">
+            <div id="tableContainer"></div>
+        </div>
 
         <div class="footer-copyright">
             <div>Copyright © <b>PHÒNG KỸ THUẬT - HueWACO</b></div>
@@ -404,7 +445,7 @@
             let id_mm = (od - 2 * e - 2 * lining);
             let id_str = id_mm.toFixed(1);
 
-            // TÍNH MẶT CẮT ƯỚT A (ĐƠN VỊ m2 - 4 CHỮ SỐ THẬP PHÂN)
+            // TÍNH MẶT CẮT ƯỚT A (m2)
             let d_m = id_mm / 1000;
             let area_m2 = (Math.PI * Math.pow(d_m, 2)) / 4;
             let area_str = area_m2.toFixed(4);
