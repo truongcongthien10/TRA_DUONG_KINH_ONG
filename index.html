@@ -16,30 +16,68 @@
 
             --focus-yellow-bg: #fffde6;
             --focus-yellow-border: #e6b800;
+
+            /* KHAI BÁO HỆ THỐNG FONT CHUẨN UI/UX */
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            --font-number: "Consolas", "Roboto Mono", "Courier New", monospace;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; background: var(--bg-color); color: #242424; padding: 10px; }
-        .container { max-width: 1000px; margin: 0 auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid var(--border-color); }
-        .header-bar { background: var(--excel-green); color: #fff; text-align: center; padding: 14px 10px; font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        body { 
+            font-family: var(--font-main); 
+            background: var(--bg-color); 
+            color: #1e293b; 
+            padding: 10px; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+            background: var(--card-bg); 
+            border-radius: 8px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+            overflow: hidden; 
+            border: 1px solid var(--border-color); 
+        }
+
+        /* TIÊU ĐỀ CHÍNH */
+        .header-bar { 
+            background: var(--excel-green); 
+            color: #ffffff; 
+            text-align: center; 
+            padding: 14px 10px; 
+            font-size: 1.2rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 0.6px; 
+        }
+
         .content { padding: 15px; }
 
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
         @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
         
         .form-group { display: flex; flex-direction: column; }
-        label { font-size: 0.82rem; margin-bottom: 4px; font-weight: 700; color: #333; }
+        label { 
+            font-size: 0.85rem; 
+            margin-bottom: 5px; 
+            font-weight: 700; 
+            color: #334155; 
+        }
         
         select, input[type="number"] { 
-            padding: 8px; 
+            font-family: var(--font-main);
+            padding: 8px 10px; 
             border: 1.5px solid var(--border-color); 
-            background: #f9fbf9; 
-            border-radius: 4px; 
-            font-size: 0.88rem; 
+            background: #f8fafc; 
+            border-radius: 5px; 
+            font-size: 0.9rem; 
             font-weight: 600;
+            color: #0f172a;
             outline: none; 
             width: 100%; 
-            height: 38px; 
+            height: 40px; 
             transition: all 0.2s ease-in-out;
         }
 
@@ -51,49 +89,103 @@
         }
         input[type="number"] {
             -moz-appearance: textfield;
+            font-family: var(--font-number);
+            font-weight: 700;
+            font-size: 0.95rem;
         }
 
         select:focus, input[type="number"]:focus {
             background-color: var(--focus-yellow-bg);
             border-color: var(--focus-yellow-border);
-            box-shadow: 0 0 0 3px rgba(255, 235, 130, 0.45);
+            box-shadow: 0 0 0 3px rgba(230, 184, 0, 0.25);
         }
 
         /* KHỐI TÍNH NHANH VẬN TỐC DÒNG CHẢY */
         .calc-tool-bar {
             background: #f0f9ff;
-            border: 1px solid #bae6fd;
+            border: 1.5px solid #bae6fd;
             border-radius: 6px;
-            padding: 10px 12px;
+            padding: 10px 14px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
         }
-        .calc-tool-title { font-size: 0.82rem; font-weight: 800; color: #0369a1; text-transform: uppercase; }
+        .calc-tool-title { 
+            font-size: 0.85rem; 
+            font-weight: 800; 
+            color: #0369a1; 
+            text-transform: uppercase; 
+            letter-spacing: 0.3px;
+        }
 
         .action-btns { display: flex; gap: 8px; margin-bottom: 10px; justify-content: flex-end; }
-        .btn-action { background: #e2e8f0; border: 1px solid #cbd5e1; padding: 5px 12px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; cursor: pointer; color: #334155; }
-        .btn-action:hover { background: #cbd5e1; }
+        .btn-action { 
+            font-family: var(--font-main);
+            background: #e2e8f0; 
+            border: 1px solid #cbd5e1; 
+            padding: 6px 14px; 
+            border-radius: 5px; 
+            font-size: 0.8rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            color: #334155; 
+            transition: all 0.2s;
+        }
+        .btn-action:hover { background: #cbd5e1; color: #0f172a; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 0.85rem; }
-        th, td { border: 1px solid var(--border-color); padding: 7px 8px; text-align: center; }
-        th { background: var(--section-bg); color: var(--section-title); font-weight: 800; font-size: 0.82rem; }
-        tr:nth-child(even) { background: #fdfdfd; }
+        /* ĐỊNH DẠNG BẢNG DỮ LIỆU */
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        th, td { border: 1px solid var(--border-color); padding: 8px 10px; text-align: center; }
+        
+        th { 
+            background: var(--section-bg); 
+            color: var(--section-title); 
+            font-weight: 800; 
+            font-size: 0.85rem; 
+            letter-spacing: 0.2px;
+        }
+
+        td { 
+            font-size: 0.9rem; 
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) { background: #f8fafc; }
         tr:hover { background: #f0f7f0; }
 
-        .col-highlight-id { color: #107c41; font-weight: 800; }
-        .col-highlight-area { color: #0284c7; font-weight: 800; }
-        .col-highlight-v { color: #b91c1c; font-weight: 800; }
+        /* CÁC CỘT SỐ LIỆU DÙNG FONT ĐƠN CÁCH ĐỂ THẲNG HÀNG TỰ NHIÊN */
+        .col-highlight-id { 
+            color: #107c41; 
+            font-weight: 800; 
+            font-family: var(--font-number);
+            font-size: 0.95rem;
+        }
+        .col-highlight-area { 
+            color: #0284c7; 
+            font-weight: 800; 
+            font-family: var(--font-number);
+            font-size: 0.95rem;
+        }
+        .col-highlight-v { 
+            color: #b91c1c; 
+            font-weight: 800; 
+            font-family: var(--font-number);
+            font-size: 0.95rem;
+        }
+        .col-number {
+            font-family: var(--font-number);
+            font-weight: 600;
+        }
 
         .footer-copyright {
             margin-top: 15px;
             padding-top: 10px;
             border-top: 1px dashed var(--border-color);
             text-align: left;
-            font-size: 0.75rem;
-            color: #666;
+            font-size: 0.78rem;
+            color: #64748b;
             font-weight: 700;
             display: flex;
             justify-content: space-between;
@@ -138,14 +230,14 @@
         <div class="calc-tool-bar">
             <span class="calc-tool-title">⚡ Tính nhanh vận tốc chảy (v):</span>
             <div style="display:flex; align-items:center; gap:6px;">
-                <label style="margin:0; font-size:0.78rem;">Lưu lượng Q:</label>
-                <input type="number" id="inputQ" placeholder="Nhập Q..." style="width:110px; height:32px;" oninput="renderTable()">
-                <select id="unitQ" style="width:85px; height:32px; padding:4px;" onchange="renderTable()">
+                <label style="margin:0; font-size:0.8rem; color:#0f172a;">Lưu lượng Q:</label>
+                <input type="number" id="inputQ" placeholder="Nhập Q..." style="width:110px; height:34px;" oninput="renderTable()">
+                <select id="unitQ" style="width:85px; height:34px; padding:4px;" onchange="renderTable()">
                     <option value="m3h" selected>m³/h</option>
                     <option value="ls">l/s</option>
                 </select>
             </div>
-            <span style="font-size:0.75rem; color:#64748b; font-style:italic;">(Vận tốc v = Q / A sẽ tự động tính trong bảng)</span>
+            <span style="font-size:0.78rem; color:#64748b; font-style:italic;">(Vận tốc v = Q / A sẽ tự động tính trong bảng)</span>
         </div>
 
         <div class="action-btns">
@@ -283,7 +375,6 @@
 
         let html = `<table><thead><tr>`;
         
-        // CỘT MẶT CẮT ƯỚT TÍNH BẰNG m2 VÀ ĐẶT SAU CỘT ĐƯỜNG KÍNH
         if (mat === 'hdpe' || mat === 'pvc') {
             html += `<th>DN (mm)</th><th>OD (mm)</th><th>Mặt cắt ướt A (m²)</th><th>Độ dày e (mm)</th><th>Lòng ống ID (mm)</th><th>Trọng lượng (kg/m)</th>`;
         } else if (mat === 'ductile') {
@@ -313,7 +404,7 @@
             let id_mm = (od - 2 * e - 2 * lining);
             let id_str = id_mm.toFixed(1);
 
-            // TÍNH MẶT CẮT ƯỚT A (ĐƠN VỊ m2 - LẤY 4 CHỮ SỐ THẬP PHÂN)
+            // TÍNH MẶT CẮT ƯỚT A (ĐƠN VỊ m2 - 4 CHỮ SỐ THẬP PHÂN)
             let d_m = id_mm / 1000;
             let area_m2 = (Math.PI * Math.pow(d_m, 2)) / 4;
             let area_str = area_m2.toFixed(4);
@@ -334,11 +425,11 @@
 
             html += `<tr>`;
             if (mat === 'hdpe' || mat === 'pvc') {
-                html += `<td><b>${dn}</b></td><td>${dn}</td><td class="col-highlight-area"><b>${area_str}</b></td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td class="col-number">${dn}</td><td class="col-highlight-area">${area_str}</td><td class="col-number">${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-number"><b>${weight}</b></td>`;
             } else if (mat === 'ductile') {
-                html += `<td><b>${dn}</b></td><td>${od}</td><td class="col-highlight-area"><b>${area_str}</b></td><td>${lining}</td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td class="col-number">${od}</td><td class="col-highlight-area">${area_str}</td><td class="col-number">${lining}</td><td class="col-number">${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-number"><b>${weight}</b></td>`;
             } else if (mat === 'steel') {
-                html += `<td><b>${dn}</b></td><td>${od}</td><td class="col-highlight-area"><b>${area_str}</b></td><td>${e}</td><td class="col-highlight-id">${id_str}</td><td><b>${weight}</b></td>`;
+                html += `<td><b>${dn}</b></td><td class="col-number">${od}</td><td class="col-highlight-area">${area_str}</td><td class="col-number">${e}</td><td class="col-highlight-id">${id_str}</td><td class="col-number"><b>${weight}</b></td>`;
             }
 
             if (inputQVal > 0) {
